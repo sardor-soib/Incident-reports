@@ -14,7 +14,7 @@ public class Region {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    public Region(){
+    public Region() {
     }
 
     public Region(Long id, String name) {

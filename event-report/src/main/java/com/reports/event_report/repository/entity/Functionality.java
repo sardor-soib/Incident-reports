@@ -14,7 +14,7 @@ public class Functionality {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    public Functionality(){
+    public Functionality() {
     }
 
     public Functionality(Long id, String name) {

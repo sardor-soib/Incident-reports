@@ -8,16 +8,14 @@ import java.util.List;
 @Table(name = "group")
 public class Group {
 
+    @OneToMany(mappedBy = "group")
+    List<User> users;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "group_id")
     private Long id;
-
     @Column(name = "name")
     private String name;
-
-    @OneToMany(mappedBy = "group")
-    List<User> users;
 
     public Group() {
     }

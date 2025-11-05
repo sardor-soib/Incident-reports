@@ -3,7 +3,6 @@ package com.reports.event_report.service;
 import com.reports.event_report.web.dto.RegionDTO;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface RegionManager {
 

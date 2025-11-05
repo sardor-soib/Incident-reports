@@ -3,7 +3,6 @@ package com.reports.event_report.service;
 import com.reports.event_report.web.dto.EventDTO;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Component

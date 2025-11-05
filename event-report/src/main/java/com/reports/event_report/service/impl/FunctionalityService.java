@@ -17,10 +17,9 @@ import java.util.List;
 @Service
 public class FunctionalityService implements FunctionalityManager {
 
-    Logger log = LoggerFactory.getLogger(FunctionalityService.class);
-
     private final FunctionalityRepository functionalityRepository;
     private final FunctionalityMapper functionalityMapper;
+    Logger log = LoggerFactory.getLogger(FunctionalityService.class);
 
     public FunctionalityService(FunctionalityRepository functionalityRepository, FunctionalityMapper functionalityMapper) {
         this.functionalityRepository = functionalityRepository;
@@ -35,7 +34,7 @@ public class FunctionalityService implements FunctionalityManager {
     @Override
     public void create(@NotNull @NotBlank String name) {
 
-        if (isExistsByName(name)){
+        if (isExistsByName(name)) {
             log.error("Functionality with name: {} already exists", name);
             throw new IllegalArgumentException(String.format("Functionality with name %s already exists", name));
         }
@@ -52,10 +51,10 @@ public class FunctionalityService implements FunctionalityManager {
 
     @Override
     public void update(@NotNull Long id, @NotNull FunctionalityDTO functionalityDTO) {
-        if (functionalityRepository.existsById(id)){
+        if (functionalityRepository.existsById(id)) {
             throw new ResourceNotFoundException(String.format("Functionality with id: %d not found", id));
         }
-        if (!id.equals(functionalityDTO.id())){
+        if (!id.equals(functionalityDTO.id())) {
             throw new IllegalArgumentException("ID in path and DTO do not match");
         }
 
@@ -65,7 +64,7 @@ public class FunctionalityService implements FunctionalityManager {
 
     @Override
     public void delete(@NotNull Long id) {
-        if (functionalityRepository.existsById(id)){
+        if (functionalityRepository.existsById(id)) {
             throw new ResourceNotFoundException(String.format("Functionality with id: %d not found", id));
         }
         functionalityRepository.deleteById(id);

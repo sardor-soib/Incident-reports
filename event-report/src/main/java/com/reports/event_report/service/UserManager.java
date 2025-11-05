@@ -4,7 +4,6 @@ import com.reports.event_report.repository.entity.User;
 import com.reports.event_report.web.dto.UserDTO;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserManager {
 

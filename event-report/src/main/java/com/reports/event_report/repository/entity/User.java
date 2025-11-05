@@ -29,7 +29,7 @@ public class User {
     @JoinColumn(name = "group_id", nullable = false)
     private Group group;
 
-    public User(){
+    public User() {
     }
 
     public User(Long id, String name, String email, String password, Role role, Group group) {

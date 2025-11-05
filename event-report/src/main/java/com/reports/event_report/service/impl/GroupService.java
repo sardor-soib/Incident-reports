@@ -9,16 +9,17 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class GroupService implements GroupManager {
-
-    Logger log = LoggerFactory.getLogger(GroupService.class);
 
     private final GroupRepository groupRepository;
     private final GroupMapper groupMapper;
+    Logger log = LoggerFactory.getLogger(GroupService.class);
 
     public GroupService(GroupRepository groupRepository, GroupMapper groupMapper) {
         this.groupRepository = groupRepository;
@@ -27,7 +28,7 @@ public class GroupService implements GroupManager {
 
     @Override
     public void create(@NotNull @NotBlank String name) {
-        if (groupRepository.existsByName(name)){
+        if (groupRepository.existsByName(name)) {
             log.error("Group with name {} already exists", name);
             throw new IllegalArgumentException(String.format("Group with name %s already exists", name));
         }
@@ -42,11 +43,11 @@ public class GroupService implements GroupManager {
 
     @Override
     public void update(@NotNull Long id, @NotNull GroupDTO groupDTO) {
-        if (!groupRepository.existsById(id)){
+        if (!groupRepository.existsById(id)) {
             log.error("Group with id {} does not exist", id);
             throw new IllegalArgumentException(String.format("Group with id %d does not exist", id));
         }
-        if (!id.equals(groupDTO.id())){
+        if (!id.equals(groupDTO.id())) {
             log.error("Group id in path {} does not match id in body {}", id, groupDTO.id());
             throw new IllegalArgumentException(String.format("Group id in path %d does not match id in body %d", id, groupDTO.id()));
         }
@@ -57,7 +58,7 @@ public class GroupService implements GroupManager {
 
     @Override
     public void delete(@NotNull Long id) {
-        if (!groupRepository.existsById(id)){
+        if (!groupRepository.existsById(id)) {
             log.error("Group with id {} does not exist", id);
             throw new IllegalArgumentException(String.format("Group with id %d does not exist", id));
         }
