@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,18 +22,19 @@ public class GroupService implements GroupManager {
     private final GroupMapper groupMapper;
     Logger log = LoggerFactory.getLogger(GroupService.class);
 
+    @Autowired
     public GroupService(GroupRepository groupRepository, GroupMapper groupMapper) {
         this.groupRepository = groupRepository;
         this.groupMapper = groupMapper;
     }
 
     @Override
-    public void create(@NotNull @NotBlank String name) {
+    public GroupDTO createGroup(@NotNull @NotBlank String name) {
         if (groupRepository.existsByName(name)) {
             log.error("Group with name {} already exists", name);
             throw new IllegalArgumentException(String.format("Group with name %s already exists", name));
         }
-        groupRepository.save(new Group(null, name, new ArrayList<>()));
+        return groupMapper.toDTO(groupRepository.save(new Group(null, name, new ArrayList<>())));
     }
 
     @Override
@@ -42,7 +44,7 @@ public class GroupService implements GroupManager {
     }
 
     @Override
-    public void update(@NotNull Long id, @NotNull GroupDTO groupDTO) {
+    public GroupDTO updateGroup(@NotNull Long id, @NotNull GroupDTO groupDTO) {
         if (!groupRepository.existsById(id)) {
             log.error("Group with id {} does not exist", id);
             throw new IllegalArgumentException(String.format("Group with id %d does not exist", id));
@@ -51,18 +53,15 @@ public class GroupService implements GroupManager {
             log.error("Group id in path {} does not match id in body {}", id, groupDTO.id());
             throw new IllegalArgumentException(String.format("Group id in path %d does not match id in body %d", id, groupDTO.id()));
         }
-
-        groupRepository.save(groupMapper.toEntity(groupDTO));
-        log.info("Group with id {} updated successfully", id);
+        return groupMapper.toDTO(groupRepository.save(groupMapper.toEntity(groupDTO)));
     }
 
     @Override
-    public void delete(@NotNull Long id) {
+    public void deleteGroup(@NotNull Long id) {
         if (!groupRepository.existsById(id)) {
             log.error("Group with id {} does not exist", id);
             throw new IllegalArgumentException(String.format("Group with id %d does not exist", id));
         }
-
         groupRepository.deleteById(id);
         log.info("Group with id {} deleted successfully", id);
     }

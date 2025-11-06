@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ public class FunctionalityService implements FunctionalityManager {
     private final FunctionalityMapper functionalityMapper;
     Logger log = LoggerFactory.getLogger(FunctionalityService.class);
 
+    @Autowired
     public FunctionalityService(FunctionalityRepository functionalityRepository, FunctionalityMapper functionalityMapper) {
         this.functionalityRepository = functionalityRepository;
         this.functionalityMapper = functionalityMapper;
@@ -32,15 +34,12 @@ public class FunctionalityService implements FunctionalityManager {
     }
 
     @Override
-    public void create(@NotNull @NotBlank String name) {
-
-        if (isExistsByName(name)) {
-            log.error("Functionality with name: {} already exists", name);
-            throw new IllegalArgumentException(String.format("Functionality with name %s already exists", name));
+    public FunctionalityDTO createFunctionality(@NotNull FunctionalityDTO functionalityDTO) {
+        if (isExistsByName(functionalityDTO.name())) {
+            log.error("Functionality with name: {} already exists", functionalityDTO.name());
+            throw new IllegalArgumentException(String.format("Functionality with name %s already exists", functionalityDTO.name()));
         }
-
-        functionalityRepository.save(new Functionality(null, name));
-        log.info("Functionality with name: {} created", name);
+        return functionalityMapper.toDTO(functionalityRepository.save(functionalityMapper.toEntity(functionalityDTO)));
     }
 
     @Override
@@ -50,7 +49,7 @@ public class FunctionalityService implements FunctionalityManager {
     }
 
     @Override
-    public void update(@NotNull Long id, @NotNull FunctionalityDTO functionalityDTO) {
+    public FunctionalityDTO updateFunctionality(@NotNull Long id, @NotNull FunctionalityDTO functionalityDTO) {
         if (functionalityRepository.existsById(id)) {
             throw new ResourceNotFoundException(String.format("Functionality with id: %d not found", id));
         }
@@ -58,12 +57,11 @@ public class FunctionalityService implements FunctionalityManager {
             throw new IllegalArgumentException("ID in path and DTO do not match");
         }
 
-        functionalityRepository.save(functionalityMapper.toEntity(functionalityDTO));
-        log.info("Functionality with id: {} updated", id);
+        return functionalityMapper.toDTO(functionalityRepository.save(functionalityMapper.toEntity(functionalityDTO)));
     }
 
     @Override
-    public void delete(@NotNull Long id) {
+    public void deleteFunctionality(@NotNull Long id) {
         if (functionalityRepository.existsById(id)) {
             throw new ResourceNotFoundException(String.format("Functionality with id: %d not found", id));
         }

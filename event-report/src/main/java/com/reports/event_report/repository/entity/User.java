@@ -9,11 +9,11 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_d", nullable = false, unique = true)
-    private Long id;
+    @Column(name = "user_id", nullable = false, unique = true)
+    private Long userId;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "user_name", nullable = false)
+    private String userName;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
@@ -25,16 +25,16 @@ public class User {
     @Column(name = "role", nullable = false)
     private Role role;
 
-    @ManyToOne
-    @JoinColumn(name = "group_id", nullable = false)
+    @ManyToOne()
+    @JoinColumn(name = "groupId", nullable = false)
     private Group group;
 
     public User() {
     }
 
-    public User(Long id, String name, String email, String password, Role role, Group group) {
-        this.id = id;
-        this.name = name;
+    public User(Long userId, String userName, String email, String password, Role role, Group group) {
+        this.userId = userId;
+        this.userName = userName;
         this.email = email;
         this.password = password;
         this.role = role;
@@ -42,19 +42,19 @@ public class User {
     }
 
     public Long getId() {
-        return id;
+        return userId;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.userId = id;
     }
 
     public String getName() {
-        return name;
+        return userName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.userName = name;
     }
 
     public String getEmail() {

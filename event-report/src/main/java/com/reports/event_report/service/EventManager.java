@@ -8,15 +8,15 @@ import java.util.List;
 @Component
 public interface EventManager {
 
-    void addEvent(EventDTO eventDTO);
+    EventDTO createEvent(EventDTO eventDTO);
 
-    List<EventDTO> searchByDateBetween(String fromDate, String toDate);
+    List<EventDTO> searchByDateRange(String fromDate, String toDate);
 
     List<EventDTO> getForLastDay(String date);
 
     List<EventDTO> getForLastWeek(String date);
 
-    void updateEvent(Long id, EventDTO eventDTO);
+    EventDTO updateEvent(Long id, EventDTO eventDTO);
 
     void removeEvent(Long id);
 }

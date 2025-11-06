@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface GroupManager {
 
-    void create(String name);
+    GroupDTO createGroup(String name);
 
     List<GroupDTO> search(String name);
 
-    void update(Long id, GroupDTO groupDTO);
+    GroupDTO updateGroup(Long id, GroupDTO groupDTO);
 
-    void delete(Long id);
+    void deleteGroup(Long id);
 }

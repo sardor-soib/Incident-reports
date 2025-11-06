@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface RegionManager {
 
-    void create(String name);
+    RegionDTO createRegion(String name);
 
     List<RegionDTO> search(String name);
 
-    void update(Long id, RegionDTO regionDTO);
+    RegionDTO updateRegion(Long id, RegionDTO regionDTO);
 
-    void delete(Long id);
+    void deleteRegion(Long id);
 }

@@ -5,41 +5,43 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "group")
+@Table(name = "functional_group")
 public class Group {
 
-    @OneToMany(mappedBy = "group")
-    List<User> users;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "group_id")
-    private Long id;
-    @Column(name = "name")
-    private String name;
+    private Long groupId;
+
+    @Column(name = "group_name")
+    private String groupName;
+
+    @OneToMany(mappedBy = "group")
+    List<User> users;
 
     public Group() {
     }
 
-    public Group(Long id, String name, List<User> users) {
-        this.id = id;
-        this.name = name;
+    public Group(Long groupId, String groupName, List<User> users) {
+        this.groupId = groupId;
+        this.groupName = groupName;
         this.users = users;
     }
 
     public Long getId() {
-        return id;
+        return groupId;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.groupId = id;
     }
 
     public String getName() {
-        return name;
+        return groupName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.groupName = name;
     }
 
     public List<User> getUsers() {

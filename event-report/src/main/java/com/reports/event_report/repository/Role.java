@@ -1,11 +1,17 @@
 package com.reports.event_report.repository;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public enum Role {
-    CONSUMER,
-    ADMIN,
-    USER
+    CONSUMER("Consumer"),
+    ADMIN("Admin"),
+    USER("User");
 
+    private final String displayName;
+
+    Role(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getName() {
+        return this.displayName;
+    }
 }

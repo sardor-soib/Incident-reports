@@ -8,6 +8,7 @@ import com.reports.event_report.web.dto.UserDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,15 +21,16 @@ public class UserService implements UserManager {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
+    @Autowired
     public UserService(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
     }
 
     @Override
-    public void addUser(@NotNull UserDTO userDTO) {
+    public UserDTO createUser(@NotNull UserDTO userDTO) {
         log.info("Adding user: {}", userDTO);
-        userRepository.save(userMapper.toEntity(userDTO));
+        return userMapper.toDTO(userRepository.save(userMapper.toEntity(userDTO)));
     }
 
     @Override
@@ -38,7 +40,7 @@ public class UserService implements UserManager {
     }
 
     @Override
-    public void updateUser(@NotNull Long id, @NotNull UserDTO userDTO) {
+    public UserDTO updateUser(@NotNull Long id, @NotNull UserDTO userDTO) {
         log.info("Updating user with id: {}", id);
         if (!userRepository.existsById(id)) {
             log.error("User with id {} does not exist", id);
@@ -48,9 +50,7 @@ public class UserService implements UserManager {
             log.error("User id in path {} does not match id in body {}", id, userDTO.id());
             throw new IllegalArgumentException(String.format("User id in path %d does not match id in body %d", id, userDTO.id()));
         }
-
-        userRepository.save(userMapper.toEntity(userDTO));
-        log.info("User with id {} updated successfully", id);
+        return userMapper.toDTO(userRepository.save(userMapper.toEntity(userDTO)));
     }
 
     @Override

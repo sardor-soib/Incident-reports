@@ -1,16 +1,19 @@
 package com.reports.event_report.service.impl;
 
 import com.reports.event_report.repository.EventRepository;
+import com.reports.event_report.repository.entity.Event;
 import com.reports.event_report.service.EventManager;
 import com.reports.event_report.service.mapper.EventMapper;
 import com.reports.event_report.web.dto.EventDTO;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
@@ -22,26 +25,27 @@ public class EventService implements EventManager {
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
 
+    @Autowired
     public EventService(EventRepository eventRepository, EventMapper eventMapper) {
         this.eventRepository = eventRepository;
         this.eventMapper = eventMapper;
     }
 
     @Override
-    public void addEvent(@NotNull EventDTO eventDTO) {
+    public EventDTO createEvent(@NotNull EventDTO eventDTO) {
         log.info("Adding event: {}", eventDTO);
-        eventRepository.save(eventMapper.toEntity(eventDTO));
+        return eventMapper.toDTO(eventRepository.save(eventMapper.toEntity(eventDTO)));
     }
 
     @Override
-    public List<EventDTO> searchByDateBetween(@NotNull String fromDate, @NotNull String toDate) {
+    public List<EventDTO> searchByDateRange(@NotNull String fromDate, @NotNull String toDate) {
 
-        LocalDate startDate;
-        LocalDate endDate;
+        LocalDateTime startDate;
+        LocalDateTime endDate;
 
         try {
-            startDate = LocalDate.parse(fromDate);
-            endDate = LocalDate.parse(toDate);
+            startDate = LocalDateTime.parse(fromDate);
+            endDate = LocalDateTime.parse(toDate);
         } catch (DateTimeParseException e) {
             log.error("Invalid date format: {} or {}", fromDate, toDate);
             throw new IllegalArgumentException(e.getMessage());
@@ -53,13 +57,17 @@ public class EventService implements EventManager {
     }
 
     @Override
-    public List<EventDTO> getForLastDay(@NotNull String date) {
+    public List<EventDTO> getForLastDay(@NotNull String toDate) {
+
+        LocalDateTime endDate;
+
         try {
-            return eventRepository.getForLastDay(LocalDate.parse(date)).stream()
+            endDate = LocalDateTime.parse(toDate);
+            return eventRepository.getForLastDay(endDate).stream()
                     .map(eventMapper::toDTO)
                     .toList();
         } catch (DateTimeParseException e) {
-            log.error("Invalid date format: date={}", date);
+            log.error("Invalid date format: date={}", toDate);
             throw new IllegalArgumentException(e.getMessage());
         }
     }
@@ -67,7 +75,7 @@ public class EventService implements EventManager {
     @Override
     public List<EventDTO> getForLastWeek(@NotNull String date) {
         try {
-            return eventRepository.getForLastDay(LocalDate.parse(date)).stream()
+            return eventRepository.getForLastDay(LocalDateTime.parse(date)).stream()
                     .map(eventMapper::toDTO)
                     .toList();
         } catch (DateTimeParseException e) {
@@ -77,7 +85,7 @@ public class EventService implements EventManager {
     }
 
     @Override
-    public void updateEvent(@NotNull Long id, @NotNull EventDTO eventDTO) {
+    public EventDTO updateEvent(@NotNull Long id, @NotNull EventDTO eventDTO) {
         if (!eventRepository.existsById(id)) {
             throw new IllegalArgumentException(String.format("Event with id %d not found", id));
 
@@ -86,9 +94,8 @@ public class EventService implements EventManager {
             log.error("Event ID mismatch: path id {} and eventDTO id {}", id, eventDTO.id());
             throw new IllegalArgumentException(String.format("Event ID %d in path and in body %d do not match", id, eventDTO.id()));
         }
-
         log.info("Updating event with id {}: {}", id, eventDTO);
-        eventRepository.save(eventMapper.toEntity(eventDTO));
+        return eventMapper.toDTO(eventRepository.save(eventMapper.toEntity(eventDTO)));
     }
 
     @Override

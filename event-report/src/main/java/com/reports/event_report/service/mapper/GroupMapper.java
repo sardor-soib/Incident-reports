@@ -9,7 +9,7 @@ public interface GroupMapper {
 
     Group toEntity(GroupDTO groupDTO);
 
-    GroupMapper toDTO(Group group);
+    GroupDTO toDTO(Group group);
 
     List<Group> toEntityList(List<GroupDTO> groupDTOs);
 

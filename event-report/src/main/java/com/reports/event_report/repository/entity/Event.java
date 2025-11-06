@@ -10,33 +10,43 @@ import java.util.List;
 @Table(name = "event")
 public class Event {
 
-    @OneToMany(mappedBy = "group_id")
-    List<Group> responsibleGroups;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "event_id", nullable = false, unique = true)
     private Long id;
+
     @Column(name = "start_time", nullable = false)
     private LocalDateTime startTime;
+
     @Column(name = "end_time", nullable = false)
     private LocalDateTime endTime;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     private EventType type;
+
     @ManyToOne
     @JoinColumn(name = "region_id", nullable = false)
     private Region region;
+
     @ManyToOne
     @JoinColumn(name = "functionality_id", nullable = false)
     private Functionality functionality;
+
     @Column(name = "category", nullable = false)
     private Integer category;
+
     @Column(name = "impact", nullable = false)
     private Integer impact;
+
     @Column(name = "description", nullable = false)
     private String description;
+
     @Column(name = "solution", nullable = false)
     private String solution;
+
+    @OneToMany(mappedBy = "groupId")
+    List<Group> responsibleGroups;
 
     public Event() {
     }

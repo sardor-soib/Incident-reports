@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface UserManager {
 
-    void addUser(UserDTO userDTO);
+    UserDTO createUser(UserDTO userDTO);
 
     List<User> search(String string);
 
-    void updateUser(Long id, UserDTO userDTO);
+    UserDTO updateUser(Long id, UserDTO userDTO);
 
     void removeUser(Long id);
 

@@ -8,12 +8,12 @@ public interface FunctionalityManager {
 
     boolean isExistsByName(String name);
 
-    void create(String name);
+    FunctionalityDTO createFunctionality(FunctionalityDTO functionalityDTO);
 
     List<FunctionalityDTO> search(String name);
 
-    void update(Long id, FunctionalityDTO functionalityDTO);
+    FunctionalityDTO updateFunctionality(Long id, FunctionalityDTO functionalityDTO);
 
-    void delete(Long id);
+    void deleteFunctionality(Long id);
 
 }
