@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface EventMapper {
 
-    @Mapping(target = "responsibleGroups", source = "responsibleGroupIds")
+    @Mapping(target = "groups", expression = "java(map(eventDTO.groupIds()))")
     @Mapping(target = "region.id", source = "regionId")
     @Mapping(target = "functionality.id", source = "functionalityId")
     Event toEntity(EventDTO eventDTO);
 
-    @Mapping(target = "responsibleGroupIds", source = "responsibleGroups")
+    @Mapping(target = "groupIds", expression = "java(mapGroupsToIds(event.getGroups()))")
     @Mapping(target = "regionId", source = "region.id")
     @Mapping(target = "functionalityId", source = "functionality.id")
     EventDTO toDTO(Event event);

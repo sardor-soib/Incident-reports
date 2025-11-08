@@ -14,6 +14,6 @@ public record EventDTO(
         Integer impact,
         String description,
         String solution,
-        List<Long> responsibleGroupIds
+        List<Long> groupIds
 ) {
 }

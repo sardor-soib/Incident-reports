@@ -13,7 +13,7 @@ public class User {
     private Long userId;
 
     @Column(name = "user_name", nullable = false)
-    private String userName;
+    private String name;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
@@ -26,15 +26,15 @@ public class User {
     private Role role;
 
     @ManyToOne()
-    @JoinColumn(name = "groupId", nullable = false)
+    @JoinColumn(name = "group_id", nullable = false)
     private Group group;
 
     public User() {
     }
 
-    public User(Long userId, String userName, String email, String password, Role role, Group group) {
+    public User(Long userId, String name, String email, String password, Role role, Group group) {
         this.userId = userId;
-        this.userName = userName;
+        this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
@@ -50,11 +50,11 @@ public class User {
     }
 
     public String getName() {
-        return userName;
+        return name;
     }
 
     public void setName(String name) {
-        this.userName = name;
+        this.name = name;
     }
 
     public String getEmail() {

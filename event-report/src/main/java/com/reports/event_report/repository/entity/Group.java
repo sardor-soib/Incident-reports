@@ -8,38 +8,40 @@ import java.util.List;
 @Table(name = "functional_group")
 public class Group {
 
-    @OneToMany(mappedBy = "group")
-    List<User> users;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "group_id")
-    private Long groupId;
-    @Column(name = "group_name")
-    private String groupName;
+    private Long id;
+
+    @Column(name = "group_name", nullable = false, unique = true)
+    private String name;
+
+    @OneToMany(mappedBy = "group")
+    List<User> users;
 
     public Group() {
     }
 
-    public Group(Long groupId, String groupName, List<User> users) {
-        this.groupId = groupId;
-        this.groupName = groupName;
+    public Group(Long id, String name, List<User> users) {
+        this.id = id;
+        this.name = name;
         this.users = users;
     }
 
     public Long getId() {
-        return groupId;
+        return id;
     }
 
     public void setId(Long id) {
-        this.groupId = id;
+        this.id = id;
     }
 
     public String getName() {
-        return groupName;
+        return name;
     }
 
     public void setName(String name) {
-        this.groupName = name;
+        this.name = name;
     }
 
     public List<User> getUsers() {

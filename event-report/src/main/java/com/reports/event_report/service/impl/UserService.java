@@ -37,7 +37,7 @@ public class UserService implements UserManager {
     @Override
     public Page<UserDTO> search(@NotNull @NotBlank String string, @NotNull Pageable pageable) {
         log.info("Searching users with username containing: {}", string);
-        return userMapper.toDTOPage(userRepository.findByUsernameContainingIgnoreCase(string, pageable));
+        return userMapper.toDTOPage(userRepository.findBynameContainingIgnoreCase(string, pageable));
     }
 
     @Override
