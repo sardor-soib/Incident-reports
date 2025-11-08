@@ -8,7 +8,7 @@ public interface UserManager {
 
     UserDTO createUser(UserDTO userDTO);
 
-    Page<UserDTO> search(String fieldName, Pageable pageable);
+    Page<UserDTO> search(String name, String email, Pageable pageable);
 
     UserDTO updateUser(Long id, UserDTO userDTO);
 

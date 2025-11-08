@@ -47,11 +47,6 @@ spring:
         jwt:
           issuer-uri: "https://${auth0.domain}/"
 
-auth0:
-  domain: "dev-ruik4gzrk5x137ze.eu.auth0.com"
-  jwks-url: "https://${auth0.domain}/.well-known/jwks.json"
-  audience: "https://localhost:8080/"
-
 logging:
   level:
     root: INFO
@@ -65,8 +60,6 @@ logging:
     file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
   file:
     name: application.log
-    max-size: 10MB
-    max-history: 5
 
 server:
   port: 8080
@@ -77,3 +70,8 @@ springdoc:
     path: /api-docs.yaml
   swagger-ui:
     path: /swagger-ui.html
+
+auth0:
+  domain: "dev-ruik4gzrk5x137ze.eu.auth0.com"
+  jwks-url: "https://${auth0.domain}/.well-known/jwks.json"
+  audience: "https://localhost:8080/"

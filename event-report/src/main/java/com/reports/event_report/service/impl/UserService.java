@@ -4,7 +4,6 @@ import com.reports.event_report.repository.UserRepository;
 import com.reports.event_report.service.UserManager;
 import com.reports.event_report.service.mapper.UserMapper;
 import com.reports.event_report.web.dto.UserDTO;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,9 +34,10 @@ public class UserService implements UserManager {
     }
 
     @Override
-    public Page<UserDTO> search(@NotNull @NotBlank String string, @NotNull Pageable pageable) {
-        log.info("Searching users with username containing: {}", string);
-        return userMapper.toDTOPage(userRepository.findBynameContainingIgnoreCase(string, pageable));
+    public Page<UserDTO> search(String name, String email, @NotNull Pageable pageable) {
+
+        log.info("Searching users for name: {}, email {},", name, email);
+        return userMapper.toDTOPage(userRepository.findByNameOrEmailContainingIgnoreCase(name, email, pageable));
     }
 
     @Override
