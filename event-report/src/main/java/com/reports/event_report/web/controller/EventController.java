@@ -6,11 +6,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @Validated
@@ -34,20 +34,20 @@ public class EventController {
 
     @Operation(summary = "Search events by date range", description = "Retrieves events that fall within the specified date range")
     @GetMapping("/search")
-    public List<EventDTO> searchByDateRange(@RequestParam("from") String fromDate, @RequestParam("to") String toDate) {
-        return eventManager.searchByDateRange(fromDate, toDate);
+    public Page<EventDTO> searchByDateRange(@RequestParam("from") String fromDate, @RequestParam("to") String toDate, Pageable pageable) {
+        return eventManager.searchByDateRange(fromDate, toDate, pageable);
     }
 
     @Operation(summary = "Get events for a specific day", description = "Retrieves all events for the specified day")
     @GetMapping("/by-day")
-    public List<EventDTO> getForLastDay(@RequestParam("date") String date) {
-        return eventManager.getForLastDay(date);
+    public Page<EventDTO> getForLastDay(@RequestParam("date") String date, Pageable pageable) {
+        return eventManager.getForLastDay(pageable);
     }
 
     @Operation(summary = "Get events for a specific week", description = "Retrieves all events for the week containing the specified date")
     @GetMapping("/by-week")
-    public List<EventDTO> getForLastWeek(@RequestParam("date") String date) {
-        return eventManager.getForLastWeek(date);
+    public Page<EventDTO> getForLastWeek(@RequestParam("date") String date, Pageable pageable) {
+        return eventManager.getForLastWeek(pageable);
     }
 
     @Operation(summary = "Update an existing event", description = "Updates the details of an existing event identified by its ID")

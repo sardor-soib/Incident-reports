@@ -1,72 +1,79 @@
 spring:
   application:
     name: event-report
-    datasource:
-      driver-class-name: org.postgresql.Driver
-      url: jdbc:postgresql://localhost:5432/event_report
-      username: postgres
-      password: 12345
-      hikari:
-        minimum-idle: 1
-        maximum-pool-size: 5
-      jpa:
-        properties:
-          hibernate:
-            dialect: org.hibernate.dialect.PostgreSQLDialect
-            default_schema: event_report
-            ddl-auto: none
-      flyway:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/event_report
+    username: postgres
+    password: 12345
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 5
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: event_report
+
+  flyway:
+    enabled: true
+    create-schemas: true
+    schemas: event_report
+    default-schema: event_report
+    baseline-on-migrate: true
+    locations: classpath:db/migration/
+
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+      port: 35729
+    remote:
+      restart:
         enabled: true
-        create-schemas: true
-        schemas: event_report
-        default-schema: event_report
-        baseline-on-migrate: true
-        locations: classpath:db/migration/
-      devtools:
-        restart:
-          enabled: true
-        livereload:
-          enabled: true
-          port: 35729
-        remote:
-          restart:
-            enabled: true
-      web:
-        resources:
-          cache:
-            period: 0
-      security:
-        oauth2:
-          resourceserver:
-            jwt:
-              issuer-uri: "https://${auth0.domain}/"
-    logging:
-      level:
-        root: INFO
-        ua.foxminded: DEBUG
-        org.springframework.web: DEBUG
-        org.springframework.boot.autoconfigure.web: DEBUG
-        org.hibernate: INFO
-        org.flywaydb: INFO
-      pattern:
-        console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
-        file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
-      file:
-        name: application.log
-        max-size: 10MB
-        max-history: 5
-    server:
-      port: 8080
 
-    auth0:
-      domain: "dev-ruik4gzrk5x137ze.eu.auth0.com"
-      jwks-url: "https://${auth0.domain}/.well-known/jwks.json"
-      audience: "https://localhost:8080/"
+  web:
+    resources:
+      cache:
+        period: 0
 
-    springdoc:
-      package-to-scan: com.reports.event-report.web.controller
-      tagsSorting: alpha
-      api-docs:
-        path: /api-docs.yaml
-      swagger-ui:
-        path: /swagger-ui.html
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "https://${auth0.domain}/"
+
+auth0:
+  domain: "dev-ruik4gzrk5x137ze.eu.auth0.com"
+  jwks-url: "https://${auth0.domain}/.well-known/jwks.json"
+  audience: "https://localhost:8080/"
+
+logging:
+  level:
+    root: INFO
+    com.reports: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.boot.autoconfigure.web: DEBUG
+    org.hibernate: INFO
+    org.flywaydb: INFO
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+  file:
+    name: application.log
+    max-size: 10MB
+    max-history: 5
+
+server:
+  port: 8080
+
+springdoc:
+  packages-to-scan: com.reports.event_report.web.controller
+  api-docs:
+    path: /api-docs.yaml
+  swagger-ui:
+    path: /swagger-ui.html

@@ -1,7 +1,5 @@
 package com.reports.event_report.repository;
 
-import org.springframework.stereotype.Component;
-
 public enum EventType {
     EMERGENCY("Emergency"),
     RFC("RFC"),

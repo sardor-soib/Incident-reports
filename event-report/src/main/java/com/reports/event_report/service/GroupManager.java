@@ -1,14 +1,14 @@
 package com.reports.event_report.service;
 
 import com.reports.event_report.web.dto.GroupDTO;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface GroupManager {
 
-    GroupDTO createGroup(String name);
+    GroupDTO createGroup(GroupDTO groupDTO);
 
-    List<GroupDTO> search(String name);
+    Page<GroupDTO> search(String name, Pageable pageable);
 
     GroupDTO updateGroup(Long id, GroupDTO groupDTO);
 

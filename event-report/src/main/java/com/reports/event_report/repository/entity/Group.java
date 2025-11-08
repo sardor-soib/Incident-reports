@@ -8,16 +8,14 @@ import java.util.List;
 @Table(name = "functional_group")
 public class Group {
 
+    @OneToMany(mappedBy = "group")
+    List<User> users;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "group_id")
     private Long groupId;
-
     @Column(name = "group_name")
     private String groupName;
-
-    @OneToMany(mappedBy = "group")
-    List<User> users;
 
     public Group() {
     }

@@ -10,9 +10,9 @@ import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class RegionService implements RegionManager {
@@ -29,15 +29,15 @@ public class RegionService implements RegionManager {
     }
 
     @Override
-    public RegionDTO createRegion(@NotNull @NotBlank String name) {
-        log.info("Creating region with name: {}", name);
-        return regionMapper.toDTO(regionRepository.save(new Region(null, name)));
+    public RegionDTO createRegion(@NotNull RegionDTO regionDTO) {
+        log.info("Creating region with name: {}", regionDTO.name());
+        return regionMapper.toDTO(regionRepository.save(new Region(null, regionDTO.name())));
     }
 
     @Override
-    public List<RegionDTO> search(@NotNull @NotBlank String name) {
+    public Page<RegionDTO> search(@NotNull @NotBlank String name, @NotNull Pageable pageable) {
         log.info("Searching regions with name containing: {}", name);
-        return regionMapper.toDTOList(regionRepository.findByNameContainingIgnoreCase(name));
+        return regionMapper.toDTOPage(regionRepository.findByNameContainingIgnoreCase(name, pageable));
     }
 
     @Override

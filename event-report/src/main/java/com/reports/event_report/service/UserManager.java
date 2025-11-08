@@ -1,15 +1,14 @@
 package com.reports.event_report.service;
 
-import com.reports.event_report.repository.entity.User;
 import com.reports.event_report.web.dto.UserDTO;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface UserManager {
 
     UserDTO createUser(UserDTO userDTO);
 
-    List<User> search(String string);
+    Page<UserDTO> search(String fieldName, Pageable pageable);
 
     UserDTO updateUser(Long id, UserDTO userDTO);
 

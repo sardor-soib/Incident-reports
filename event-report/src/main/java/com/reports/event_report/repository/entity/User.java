@@ -73,11 +73,11 @@ public class User {
         this.password = password;
     }
 
-    public Role getType() {
+    public Role getRole() {
         return role;
     }
 
-    public void setType(Role role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 

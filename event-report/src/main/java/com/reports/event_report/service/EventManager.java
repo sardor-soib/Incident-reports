@@ -1,20 +1,20 @@
 package com.reports.event_report.service;
 
 import com.reports.event_report.web.dto.EventDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public interface EventManager {
 
     EventDTO createEvent(EventDTO eventDTO);
 
-    List<EventDTO> searchByDateRange(String fromDate, String toDate);
+    Page<EventDTO> searchByDateRange(String fromDate, String toDate, Pageable pageable);
 
-    List<EventDTO> getForLastDay(String date);
+    Page<EventDTO> getForLastDay(Pageable pageable);
 
-    List<EventDTO> getForLastWeek(String date);
+    Page<EventDTO> getForLastWeek(Pageable pageable);
 
     EventDTO updateEvent(Long id, EventDTO eventDTO);
 

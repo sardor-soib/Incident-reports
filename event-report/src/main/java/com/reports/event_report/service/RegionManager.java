@@ -1,14 +1,14 @@
 package com.reports.event_report.service;
 
 import com.reports.event_report.web.dto.RegionDTO;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface RegionManager {
 
-    RegionDTO createRegion(String name);
+    RegionDTO createRegion(RegionDTO regionDTO);
 
-    List<RegionDTO> search(String name);
+    Page<RegionDTO> search(String name, Pageable pageable);
 
     RegionDTO updateRegion(Long id, RegionDTO regionDTO);
 

@@ -1,8 +1,8 @@
 package com.reports.event_report.service;
 
 import com.reports.event_report.web.dto.FunctionalityDTO;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface FunctionalityManager {
 
@@ -10,7 +10,7 @@ public interface FunctionalityManager {
 
     FunctionalityDTO createFunctionality(FunctionalityDTO functionalityDTO);
 
-    List<FunctionalityDTO> search(String name);
+    Page<FunctionalityDTO> search(String name, Pageable pageable);
 
     FunctionalityDTO updateFunctionality(Long id, FunctionalityDTO functionalityDTO);
 

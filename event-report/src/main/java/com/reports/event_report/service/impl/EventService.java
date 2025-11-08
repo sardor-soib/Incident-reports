@@ -1,7 +1,6 @@
 package com.reports.event_report.service.impl;
 
 import com.reports.event_report.repository.EventRepository;
-import com.reports.event_report.repository.entity.Event;
 import com.reports.event_report.service.EventManager;
 import com.reports.event_report.service.mapper.EventMapper;
 import com.reports.event_report.web.dto.EventDTO;
@@ -9,13 +8,13 @@ import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
-import java.util.List;
 
 @Service
 public class EventService implements EventManager {
@@ -38,7 +37,7 @@ public class EventService implements EventManager {
     }
 
     @Override
-    public List<EventDTO> searchByDateRange(@NotNull String fromDate, @NotNull String toDate) {
+    public Page<EventDTO> searchByDateRange(@NotNull String fromDate, @NotNull String toDate, @NotNull Pageable pageable) {
 
         LocalDateTime startDate;
         LocalDateTime endDate;
@@ -51,37 +50,20 @@ public class EventService implements EventManager {
             throw new IllegalArgumentException(e.getMessage());
 
         }
-        return eventRepository.findByDateBetween(startDate, endDate).stream()
-                .map(eventMapper::toDTO)
-                .toList();
+        return eventMapper.toDTOPage(eventRepository.findByStartTimeBetween(startDate, endDate, pageable));
     }
 
     @Override
-    public List<EventDTO> getForLastDay(@NotNull String toDate) {
-
-        LocalDateTime endDate;
-
-        try {
-            endDate = LocalDateTime.parse(toDate);
-            return eventRepository.getForLastDay(endDate).stream()
-                    .map(eventMapper::toDTO)
-                    .toList();
-        } catch (DateTimeParseException e) {
-            log.error("Invalid date format: date={}", toDate);
-            throw new IllegalArgumentException(e.getMessage());
-        }
+    public Page<EventDTO> getForLastDay(@NotNull Pageable pageable) {
+        log.info("Fetching events for the last day");
+        return eventMapper.toDTOPage(eventRepository.findByStartTimeBetween(LocalDateTime.now().minusDays(1), LocalDateTime.now(), pageable));
     }
 
     @Override
-    public List<EventDTO> getForLastWeek(@NotNull String date) {
-        try {
-            return eventRepository.getForLastDay(LocalDateTime.parse(date)).stream()
-                    .map(eventMapper::toDTO)
-                    .toList();
-        } catch (DateTimeParseException e) {
-            log.error("Invalid date format: date={}", date);
-            throw new IllegalArgumentException(e.getMessage());
-        }
+    public Page<EventDTO> getForLastWeek(@NotNull Pageable pageable) {
+        log.info("Fetching events for the last week");
+        return eventMapper.toDTOPage(eventRepository.findByStartTimeBetween(LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), pageable));
+
     }
 
     @Override

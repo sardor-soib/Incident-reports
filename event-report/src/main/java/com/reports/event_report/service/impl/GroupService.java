@@ -5,22 +5,25 @@ import com.reports.event_report.repository.entity.Group;
 import com.reports.event_report.service.GroupManager;
 import com.reports.event_report.service.mapper.GroupMapper;
 import com.reports.event_report.web.dto.GroupDTO;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class GroupService implements GroupManager {
 
+    private final Logger log = LoggerFactory.getLogger(GroupService.class);
+
     private final GroupRepository groupRepository;
     private final GroupMapper groupMapper;
-    Logger log = LoggerFactory.getLogger(GroupService.class);
 
     @Autowired
     public GroupService(GroupRepository groupRepository, GroupMapper groupMapper) {
@@ -29,18 +32,18 @@ public class GroupService implements GroupManager {
     }
 
     @Override
-    public GroupDTO createGroup(@NotNull @NotBlank String name) {
-        if (groupRepository.existsByName(name)) {
-            log.error("Group with name {} already exists", name);
-            throw new IllegalArgumentException(String.format("Group with name %s already exists", name));
+    public GroupDTO createGroup(@NotNull @Valid GroupDTO groupDTO) {
+        if (groupRepository.existsByName(groupDTO.name())) {
+            log.error("Group with name {} already exists", groupDTO.name());
+            throw new IllegalArgumentException(String.format("Group with name %s already exists", groupDTO.name()));
         }
-        return groupMapper.toDTO(groupRepository.save(new Group(null, name, new ArrayList<>())));
+        return groupMapper.toDTO(groupRepository.save(new Group(null, groupDTO.name(), new ArrayList<>())));
     }
 
     @Override
-    public List<GroupDTO> search(@NotNull @NotBlank String name) {
+    public Page<GroupDTO> search(@NotNull @NotBlank String name, @NotNull Pageable pageable) {
         log.info("Searching groups with name containing: {}", name);
-        return groupMapper.toDTOList(groupRepository.findByNameContainingIgnoreCase(name));
+        return groupMapper.toDTOPage(groupRepository.findByNameContainingIgnoreCase(name, pageable));
     }
 
     @Override

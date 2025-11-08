@@ -1,7 +1,6 @@
 package com.reports.event_report.service.impl;
 
 import com.reports.event_report.repository.FunctionalityRepository;
-import com.reports.event_report.repository.entity.Functionality;
 import com.reports.event_report.service.FunctionalityManager;
 import com.reports.event_report.service.mapper.FunctionalityMapper;
 import com.reports.event_report.web.dto.FunctionalityDTO;
@@ -10,10 +9,10 @@ import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class FunctionalityService implements FunctionalityManager {
@@ -43,9 +42,9 @@ public class FunctionalityService implements FunctionalityManager {
     }
 
     @Override
-    public List<FunctionalityDTO> search(@NotNull @NotBlank String name) {
+    public Page<FunctionalityDTO> search(@NotNull @NotBlank String name, @NotNull Pageable pageable) {
         log.info("Searching functionalities with name containing: {}", name);
-        return functionalityMapper.toDTOList(functionalityRepository.findByNameContainingIgnoreCase(name));
+        return functionalityMapper.toDTOPage(functionalityRepository.findByNameContainingIgnoreCase(name, pageable));
     }
 
     @Override
