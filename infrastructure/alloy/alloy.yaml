@@ -1,0 +1,44 @@
+logging:
+  level: info
+  format: logfmt
+
+metrics:
+  wal_directory: /tmp/alloy/wal
+
+prometheus:
+  scrape_configs:
+    - job_name: spring_actuator
+      scrape_interval: 15s
+      metrics_path: /actuator/prometheus
+      static_configs:
+        - targets:
+            - host.docker.internal:8080
+          labels:
+            job: incident-reports
+            application: spring-boot
+
+    - job_name: alloy_self
+      scrape_interval: 15s
+      static_configs:
+        - targets:
+            - localhost:12345
+
+  remote_write:
+    - url: http://prometheus:9090/api/v1/write
+      send_exemplars: true
+
+loki:
+  configs:
+    - name: default
+      clients:
+        - url: http://loki:3100/loki/api/v1/push
+
+      scrape_configs:
+        - job_name: spring_logs
+          static_configs:
+            - targets:
+                - localhost
+              labels:
+                job: incident-reports
+                app: spring-boot
+                __path__: /var/log/spring/*.log
